@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arc'teryx | 會員註冊</title>
+    <style>
+        :root {
+            --primary-black: #111111;
+            --accent-grey: #f4f4f4;
+            --text-white: #ffffff;
+            --accent-orange: #e65100;
+            --border-color: #333;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { background-color: var(--primary-black); color: var(--text-white); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            background: #1a1a1a;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .logo { text-align: center; font-size: 28px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .form-group { margin-bottom: 25px; position: relative; }
+        .form-group label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: #ccc; }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-black);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus { outline: none; border-color: var(--accent-orange); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--text-white);
+            color: var(--primary-black);
+            border: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-submit:hover { background: var(--accent-orange); color: var(--text-white); }
+
+        .footer-links { text-align: center; margin-top: 30px; font-size: 13px; color: #666; }
+        .footer-links a { color: #888; text-decoration: none; transition: 0.3s; }
+        .footer-links a:hover { color: var(--accent-orange); text-decoration: underline; }
+
+        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: #888; margin-bottom: 20px; }
+        .checkbox-group input { margin-top: 3px; accent-color: var(--text-white); }
+        .checkbox-group label { line-height: 1.6; }
+        .message { display: none; margin-top: 16px; font-size: 13px; line-height: 1.6; color: #ffb07c; }
+        @media (max-width: 480px) {
+            .container { padding: 28px 22px; }
+            .subtitle { margin-bottom: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div class="logo">Arc'teryx</div>
+        <div class="subtitle">建立您的極限檔案</div>
+
+        <form id="register-form">
+            <div class="form-group">
+                <label for="fullname">全名</label>
+                <input type="text" id="fullname" name="fullname" placeholder="輸入您的姓名" autocomplete="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">電子郵件</label>
+                <input type="email" id="email" name="email" placeholder="name@example.com" autocomplete="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">電話（可選）</label>
+                <input type="tel" id="phone" name="phone" placeholder="09XX-XXX-XXX" autocomplete="tel">
+            </div>
+
+            <div class="form-group">
+                <label for="password">密碼</label>
+                <input type="password" id="password" name="password" placeholder="至少 8 個字元" minlength="8" autocomplete="new-password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">確認密碼</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="再次輸入密碼" autocomplete="new-password" required>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">我同意 <a href="#" style="color:#aaa;">會員條款</a>，並願意接收極限探險的最新情報。</label>
+            </div>
+
+            <button type="submit" class="btn-submit">立即註冊</button>
+            <p class="message" id="message" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="footer-links">
+            已有會員？<a href="#" id="login-link">登入帳號</a>
+        </div>
+    </main>
+
+    <script>
+        const form = document.getElementById('register-form');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            if (password.value !== confirmPassword.value) {
+                message.textContent = '兩次輸入的密碼不一致，請重新確認。';
+                message.style.display = 'block';
+                confirmPassword.focus();
+                return;
+            }
+
+            message.textContent = '表單驗證成功！目前這是前端展示頁，尚未連接真正的會員資料庫，因此資料不會被送出或保存。';
+            message.style.display = 'block';
+        });
+
+        document.getElementById('login-link').addEventListener('click', function (event) {
+            event.preventDefault();
+            message.textContent = '登入功能目前尚未連接。';
+            message.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
