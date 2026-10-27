@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>Arc'teryx | 探索戶外</title>
+  <style>
+    :root {
+      --black: #111111;
+      --panel: #1a1a1a;
+      --white: #ffffff;
+      --muted: #b8b8b8;
+      --orange: #e65100;
+      --border: #333333;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .topbar {
+      min-height: 76px;
+      padding: 0 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17,17,17,.96);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .brand { font-size: 25px; font-weight: 800; letter-spacing: 3px; white-space: nowrap; }
+    .nav { display: flex; align-items: center; gap: 28px; font-size: 13px; color: #ddd; }
+    .nav a:hover, .footer-links a:hover { color: var(--orange); }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .nav-button {
+      display: inline-block; border: 1px solid #666; padding: 9px 14px;
+      font-size: 12px; letter-spacing: 1px; transition: .25s;
+    }
+    .nav-button.primary { background: var(--white); color: var(--black); border-color: var(--white); }
+    .nav-button:hover { border-color: var(--orange); background: var(--orange); color: white; }
+    .hero {
+      min-height: 590px;
+      display: flex; align-items: center;
+      padding: 80px 9%;
+      position: relative; overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.56) 52%, rgba(0,0,0,.12) 100%),
+        radial-gradient(ellipse at 78% 25%, #606c6b 0%, #303a3b 24%, #182022 49%, #111 75%);
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(145deg, transparent 0 38%, rgba(220,225,220,.12) 38.2% 39%, transparent 39.2%),
+        linear-gradient(35deg, transparent 0 50%, rgba(255,255,255,.08) 50.2% 50.8%, transparent 51%),
+        linear-gradient(160deg, transparent 0 60%, rgba(0,0,0,.45) 60.2% 61%, transparent 61.2%);
+      pointer-events: none;
+    }
+    .hero-content { max-width: 610px; position: relative; z-index: 1; }
+    .eyebrow { font-size: 12px; letter-spacing: 3px; color: #e0e0e0; margin-bottom: 18px; text-transform: uppercase; }
+    h1 { font-size: clamp(42px, 6vw, 76px); line-height: 1.04; letter-spacing: -1.5px; margin-bottom: 24px; }
+    .hero p { color: #ddd; max-width: 490px; margin-bottom: 32px; font-size: 16px; }
+    .cta {
+      display: inline-block; padding: 14px 24px; background: var(--white); color: var(--black);
+      font-weight: 700; font-size: 12px; letter-spacing: 1.5px; border: 1px solid var(--white);
+      transition: .25s;
+    }
+    .cta:hover { background: var(--orange); border-color: var(--orange); color: var(--white); }
+    .section { padding: 76px 6%; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
+    .section-heading h2 { font-size: clamp(25px, 3vw, 38px); line-height: 1.2; }
+    .section-heading p { color: var(--muted); font-size: 14px; margin-top: 8px; }
+    .text-link { font-size: 12px; letter-spacing: 1px; border-bottom: 1px solid #777; padding-bottom: 5px; white-space: nowrap; }
+    .text-link:hover { color: var(--orange); border-color: var(--orange); }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .card { background: var(--panel); border: 1px solid var(--border); overflow: hidden; }
+    .card-art { height: 230px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .card-art::before { content: ""; position: absolute; width: 190px; height: 260px; border-radius: 48% 48% 18% 18%; transform: rotate(12deg); opacity: .85; }
+    .art-one { background: linear-gradient(135deg, #424d4a, #202625); }
+    .art-one::before { background: linear-gradient(90deg, #151918, #343b37 50%, #101312); }
+    .art-two { background: linear-gradient(135deg, #65665d, #262c2b); }
+    .art-two::before { background: linear-gradient(90deg, #444a43, #777d70 48%, #343a34); transform: rotate(-8deg); }
+    .art-three { background: linear-gradient(135deg, #3a454e, #161b21); }
+    .art-three::before { background: linear-gradient(90deg, #161d24, #3b4650 50%, #10161b); transform: rotate(4deg); }
+    .product-mark { position: absolute; z-index: 1; font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,.7); bottom: 16px; left: 18px; }
+    .card-body { padding: 22px; }
+    .card-body h3 { font-size: 19px; margin-bottom: 8px; }
+    .card-body p { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+    .card-body a { font-size: 11px; letter-spacing: 1px; border-bottom: 1px solid #666; padding-bottom: 4px; }
+    .card-body a:hover { color: var(--orange); border-color: var(--orange); }
+    .feature {
+      margin: 0 6% 76px; padding: 54px 6%;
+      border: 1px solid var(--border);
+      background: linear-gradient(110deg, #202422, #151716 65%, #252b29);
+      display: flex; align-items: center; justify-content: space-between; gap: 30px;
+    }
+    .feature h2 { font-size: clamp(26px, 3vw, 40px); margin-bottom: 12px; }
+    .feature p { color: var(--muted); max-width: 600px; font-size: 14px; }
+    footer { border-top: 1px solid var(--border); padding: 32px 6%; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; color: #888; font-size: 12px; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .notice { color: #777; text-align: center; padding: 0 20px 24px; font-size: 11px; }
+    @media (max-width: 800px) {
+      .topbar { padding: 16px 5%; flex-wrap: wrap; }
+      .nav { order: 3; width: 100%; justify-content: center; gap: 18px; flex-wrap: wrap; }
+      .hero { min-height: 520px; padding: 65px 7%; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .card:last-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 540px) {
+      .brand { font-size: 21px; }
+      .nav-actions { gap: 7px; }
+      .nav-button { padding: 8px 10px; }
+      .hero { min-height: 500px; }
+      .hero p { font-size: 14px; }
+      .section { padding: 55px 5%; }
+      .section-heading { align-items: start; flex-direction: column; }
+      .cards { grid-template-columns: 1fr; }
+      .card:last-child { grid-column: auto; }
+      .card-art { height: 210px; }
+      .feature { margin: 0 5% 55px; padding: 32px 24px; align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Arc'teryx 首頁">Arc'teryx</a>
+    <nav class="nav" aria-label="主要導覽">
+      <a href="#collections">商品系列</a>
+      <a href="#story">品牌理念</a>
+      <a href="#outdoor">戶外探索</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-button" href="arcteryx_register.html">會員登入</a>
+      <a class="nav-button primary" href="arcteryx_register.html">加入會員</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="outdoor">
+      <div class="hero-content">
+        <div class="eyebrow">Designed for the elements</div>
+        <h1>探索未知，<br>突破極限。</h1>
+        <p>為山野而設計，為每一次探索做好準備。以機能、耐用與簡潔設計，陪伴你走向下一段戶外旅程。</p>
+        <a class="cta" href="#collections">探索商品系列　↗</a>
+      </div>
+    </section>
+
+    <section class="section" id="collections">
+      <div class="section-heading">
+        <div>
+          <h2>為你的下一段旅程準備</h2>
+          <p>從山徑到城市，找到適合你的戶外裝備。</p>
+        </div>
+        <a class="text-link" href="#story">了解品牌理念　↗</a>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card-art art-one"><span class="product-mark">MOUNTAIN / SHELL</span></div>
+          <div class="card-body">
+            <h3>防水外套</h3>
+            <p>面對多變天候，讓每一步都更有準備。</p>
+            <a href="#story">探索系列　↗</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-art art-two"><span class="product-mark">LAYER / INSULATION</span></div>
+          <div class="card-body">
+            <h3>保暖中層</h3>
+            <p>靈活搭配，適應不同活動強度與環境。</p>
+            <a href="#story">探索系列　↗</a>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-art art-three"><span class="product-mark">PACK / EQUIPMENT</span></div>
+          <div class="card-body">
+            <h3>背包與裝備</h3>
+            <p>收納重要物品，讓旅程更加俐落自在。</p>
+            <a href="#story">探索系列　↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="feature" id="story">
+      <div>
+        <div class="eyebrow">Purpose-built performance</div>
+        <h2>專注細節，走得更遠。</h2>
+        <p>好的裝備不只是外型，更在於每個細節如何回應真實環境。選擇適合自己的裝備，尊重自然，也享受探索的過程。</p>
+      </div>
+      <a class="cta" href="arcteryx_register.html">加入會員　↗</a>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Arc'teryx 風格示範首頁</span>
+    <div class="footer-links">
+      <a href="#collections">商品系列</a>
+      <a href="#story">品牌理念</a>
+      <a href="arcteryx_register.html">會員註冊</a>
+    </div>
+  </footer>
+  <p class="notice">此頁面為前端設計示範，並非 Arc'teryx 官方網站；商品卡片與會員連結尚未連接購物或帳號系統。</p>
+</body>
+</html>
